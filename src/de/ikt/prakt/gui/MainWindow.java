@@ -1,8 +1,11 @@
-package de.ikt.prakt;
+package de.ikt.prakt.gui;
 
 import java.awt.EventQueue;
+import java.net.InetAddress;
 
 import javax.swing.JFrame;
+
+import de.ikt.prakt.controller.ProfibusInterface;
 
 public class MainWindow {
 
@@ -17,6 +20,11 @@ public class MainWindow {
 				try {
 					MainWindow window = new MainWindow();
 					window.frame.setVisible(true);
+					
+					ProfibusInterface pb = new ProfibusInterface(InetAddress.getByName("141.76.82.170"));
+					byte[] data = pb.readDataAcyclic((byte)6, (byte)0, (byte)0);
+					System.out.println(data.toString());
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

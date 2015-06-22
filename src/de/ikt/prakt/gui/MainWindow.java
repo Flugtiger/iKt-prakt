@@ -22,8 +22,11 @@ public class MainWindow {
 					window.frame.setVisible(true);
 					
 					ProfibusInterface pb = new ProfibusInterface(InetAddress.getByName("141.76.82.170"));
-					byte[] data = pb.readDataAcyclic((byte)6, (byte)0, (byte)0);
-					System.out.println(data.toString());
+					byte[] data = pb.readDataAcyclic((byte)6, (byte)0, (byte)1);
+					
+					for(int i = 0; i < data.length; i++) {
+						System.out.println(data[i]);
+					}
 					
 				} catch (Exception e) {
 					e.printStackTrace();

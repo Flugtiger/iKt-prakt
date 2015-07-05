@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import javax.swing.JFrame;
 
 import de.ikt.prakt.controller.ProfibusInterface;
+import de.ikt.prakt.model.DeviceDirectory;
 
 public class MainWindow {
 
@@ -21,12 +22,13 @@ public class MainWindow {
 					MainWindow window = new MainWindow();
 					window.frame.setVisible(true);
 					
-					ProfibusInterface pb = new ProfibusInterface(InetAddress.getByName("141.76.82.170"));
-					byte[] data = pb.readDataAcyclic((byte)6, (byte)0, (byte)1);
+					byte devAddr = 6; //2010TD: 6; ABB Temperaturfühler TF12: 7
 					
-					for(int i = 0; i < data.length; i++) {
-						System.out.println(data[i]);
-					}
+					ProfibusInterface pb = new ProfibusInterface(InetAddress.getByName("141.76.82.170"),12345);
+					
+					DeviceDirectory dd = DeviceDirectory.readDevDir(pb, devAddr);
+					
+					System.out.println(dd.getNumCompListDirEntry());
 					
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -15,10 +15,12 @@ public class ProfibusInterface {
 	private DatagramSocket sock;
 	private DatagramPacket recvPacket;
 	private InetAddress ip;
+	private int port;
 
-	public ProfibusInterface(InetAddress ip) {
+	public ProfibusInterface(InetAddress ip, int port) {
 
 		this.ip = ip;
+		this.port = port;
 		recvPacket = new DatagramPacket(new byte[1024], 1024);
 		try {
 			sock = new DatagramSocket();
@@ -29,10 +31,10 @@ public class ProfibusInterface {
 
 	}
 
-	public byte[] readDataAcyclic(byte address, byte slot, byte index) {
+	public byte[] readDataAcyclic(int address, int slot, int index) {
 		
-		RequestFrame req = new RequestFrame(address, slot, index);
-		DatagramPacket reqPacket = new DatagramPacket(req.getFrame(), req.getFrame().length, ip, 12345);
+		RequestFrame req = new RequestFrame((byte)address, (byte)slot, (byte)index);
+		DatagramPacket reqPacket = new DatagramPacket(req.getFrame(), req.getFrame().length, ip, port);
 		try {
 			sock.send(reqPacket);
 			

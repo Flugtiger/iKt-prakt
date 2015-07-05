@@ -2,11 +2,13 @@ package de.ikt.prakt.gui;
 
 import java.awt.EventQueue;
 import java.net.InetAddress;
+import java.util.List;
 
 import javax.swing.JFrame;
 
 import de.ikt.prakt.controller.ProfibusInterface;
 import de.ikt.prakt.model.DeviceDirectory;
+import de.ikt.prakt.model.DirectoryEntry;
 
 public class MainWindow {
 
@@ -27,8 +29,13 @@ public class MainWindow {
 					ProfibusInterface pb = new ProfibusInterface(InetAddress.getByName("141.76.82.170"),12345);
 					
 					DeviceDirectory dd = DeviceDirectory.readDevDir(pb, devAddr);
+					List<DirectoryEntry> entries = dd.readEntrys(pb);
 					
-					System.out.println(dd.getNumCompListDirEntry());
+					for(DirectoryEntry entry : entries) {
+						System.out.println(entry.getType() + ":");
+						System.out.println("\t"+entry.getSlot()+"/"+entry.getIndex());
+						System.out.println("\t"+entry.getNumParams());
+					}
 					
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.Arrays;
 
 import de.ikt.prakt.model.RequestFrame;
@@ -24,6 +24,7 @@ public class ProfibusInterface {
 		recvPacket = new DatagramPacket(new byte[1024], 1024);
 		try {
 			sock = new DatagramSocket();
+			sock.setSoTimeout(4000);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -13,6 +13,7 @@ public class DirectoryEntry {
 		LinkedObjectDirEntry
 	}
 	
+	private int address;
 	private int slot;
 	private int index;
 	private int numParams;
@@ -21,15 +22,20 @@ public class DirectoryEntry {
 	public static final byte ByteLength = 4;
 	
 	
-	public DirectoryEntry(byte[] entryData, int offset, TYPE t) {
+	public DirectoryEntry(int devAddress, byte[] entryData, int offset, TYPE t) {
 		
 		if((entryData.length - offset) < 4)
 			throw new IllegalArgumentException("data out of range");
 		
+		address = devAddress;
 		slot = entryData[offset];
 		index = entryData[offset+1];
 		numParams = (entryData[offset+2] << 8) + entryData[offset+3];
 		type = t;
+	}
+	
+	public int getAddress() {
+		return address;
 	}
 	
 	public int getSlot() {

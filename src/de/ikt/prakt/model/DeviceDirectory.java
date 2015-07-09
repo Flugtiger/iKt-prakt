@@ -95,7 +95,7 @@ public class DeviceDirectory {
 		
 		List<DirectoryEntry> compListDirEntries = new LinkedList<DirectoryEntry>();
 		for(int i = 0; i < numListEntries; i++) {
-			DirectoryEntry listEntry = new DirectoryEntry(entryListData, i*4, listTypes[i]);
+			DirectoryEntry listEntry = new DirectoryEntry(devAddr, entryListData, i*4, listTypes[i]);
 			compListDirEntries.add(listEntry);
 		}
 		
@@ -118,7 +118,7 @@ public class DeviceDirectory {
 			// lese die Entries
 			for( int i = 0; i < compListDirEntry.getNumParams(); i++) {
 				int interFrameOffset = DirectoryEntry.ByteLength * (compListDirEntry.getIndex() - frameEntryOffset + i - 1);
-				DirectoryEntry entry = new DirectoryEntry(frame, interFrameOffset, entryTypesMap.get(compListDirEntry.getType()));
+				DirectoryEntry entry = new DirectoryEntry(devAddr, frame, interFrameOffset, entryTypesMap.get(compListDirEntry.getType()));
 				entries.add(entry);
 			}
 		}

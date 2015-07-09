@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.ikt.prakt.controller.ProfibusInterface;
 import de.ikt.prakt.gui.MainWindow;
+import de.ikt.prakt.model.Block;
 import de.ikt.prakt.model.DeviceDirectory;
 import de.ikt.prakt.model.DirectoryEntry;
 
@@ -30,6 +31,8 @@ public class Main {
 						System.out.println("\t"+entry.getSlot()+"/"+entry.getIndex());
 						System.out.println("\t"+entry.getNumParams());
 					}
+					
+					Block PB = Block.readBlock(pb, entries.get(0));
 					
 				} catch (Exception e) {
 					e.printStackTrace();

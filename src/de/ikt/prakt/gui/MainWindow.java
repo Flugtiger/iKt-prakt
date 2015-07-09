@@ -13,13 +13,6 @@ import javax.swing.JTextField;
 import java.awt.CardLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
-import javax.swing.AbstractListModel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-
 
 public class MainWindow {
 
@@ -43,9 +36,9 @@ public class MainWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JPanel panel_1 = new JPanel();
+		final JPanel panel_1 = new JPanel();
 		frame.getContentPane().add(panel_1);
-		LayoutManager cardLayout = new CardLayout(0,0);
+		final LayoutManager cardLayout = new CardLayout(0,0);
 		panel_1.setLayout(cardLayout);
 		
 		JPanel panel = new JPanel();
@@ -72,10 +65,10 @@ public class MainWindow {
 		panel.add(btnClear);	
 		
 		JLabel lblLabel = new JLabel("Ger\u00E4teadresse eingeben:");
-		lblLabel.setBounds(86, 53, 126, 14);
+		lblLabel.setBounds(10, 53, 202, 14);
 		panel.add(lblLabel);
 		
-		JButton btnWeiter = new JButton("Weiter");
+		final JButton btnWeiter = new JButton("Weiter");
 		btnWeiter.setEnabled(false);
 		btnWeiter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -98,7 +91,7 @@ public class MainWindow {
 				}
 			}
 		});
-		textField.setBounds(222, 50, 105, 20);
+		textField.setBounds(210, 50, 105, 20);
 		panel.add(textField);
 		textField.setColumns(10);
 		

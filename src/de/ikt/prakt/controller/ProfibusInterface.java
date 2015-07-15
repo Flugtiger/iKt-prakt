@@ -23,7 +23,7 @@ public class ProfibusInterface {
 		recvPacket = new DatagramPacket(new byte[1024], 1024);
 		try {
 			sock = new DatagramSocket();
-			sock.setSoTimeout(4000);
+			sock.setSoTimeout(10000);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,5 +52,13 @@ public class ProfibusInterface {
 		}
 		
 		return new byte[0];
+	}
+	
+	public static int readUnsigned32(byte[] data, int offset) {
+		return (data[offset] << 3*8) | (data[++offset] << 2*8) | (data[++offset] << 8) | (data[++offset]);
+	}
+	
+	public static int readUnsigned16(byte[] data, int offset) {
+		return (data[offset] << 8) | (data[++offset]);
 	}
 }

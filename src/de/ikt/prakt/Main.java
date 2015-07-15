@@ -7,6 +7,7 @@ import java.util.List;
 import de.ikt.prakt.controller.ProfibusInterface;
 import de.ikt.prakt.gui.MainWindow;
 import de.ikt.prakt.model.Block;
+import de.ikt.prakt.model.BlockParameter;
 import de.ikt.prakt.model.DeviceDirectory;
 import de.ikt.prakt.model.DirectoryEntry;
 
@@ -17,7 +18,7 @@ public class Main {
 			public void run() {
 				try {
 					MainWindow window = new MainWindow();
-					window.setVisible(true);
+					//window.setVisible(true);
 					
 					byte devAddr = 6; //2010TD: 6; ABB Temperaturfühler TF12: 7
 					
@@ -26,13 +27,20 @@ public class Main {
 					DeviceDirectory dd = DeviceDirectory.readDevDir(pb, devAddr);
 					List<DirectoryEntry> entries = dd.readEntrys(pb);
 					
-					for(DirectoryEntry entry : entries) {
-						System.out.println(entry.getType() + ":");
-						System.out.println("\t"+entry.getSlot()+"/"+entry.getIndex());
-						System.out.println("\t"+entry.getNumParams());
-					}
+					Block block = Block.readBlock(pb, entries.get(6));
+					System.out.println("BlockObject: " + block.getBlock_Object());
+					System.out.println("ParentClass: " + block.getParent_Class());
+					System.out.println("Class: " + block.getBlockClass());
+					System.out.println("Parameters:");
 					
-					Block PB = Block.readBlock(pb, entries.get(0));
+					for(BlockParameter param : block.getParameters()) {
+						System.out.print("\t" + param.getName() + "\n\t");
+						byte[] paramData = block.readParameter(pb, param);
+						for(byte b : paramData) {
+							System.out.print(String.format("%02X ", b));
+						}
+						System.out.print("\n\n");
+					}
 					
 				} catch (Exception e) {
 					e.printStackTrace();

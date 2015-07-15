@@ -45,7 +45,7 @@ public class DeviceDirectory {
 		this.devAddr = devAddr;
 		
 		if(headerFrame.length != 12)
-			throw new IllegalArgumentException("Headerframe of device directory hast to be 12 Bytes long");
+			throw new IllegalArgumentException("Headerframe of device directory has to be 12 Bytes long");
 		
 		header = new int[6];
 		for(int i = 0; i < 6; i++) {

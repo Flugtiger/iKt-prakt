@@ -11,21 +11,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.CardLayout;
-import java.awt.Button;
-
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class MainWindow {
 
 	private JFrame frame;
 	private JTextField textField;
 	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_7;
-	private JTextField textField_8;
-	private JTextField textField_9;
 
 	/**
 	 * Create the application.
@@ -43,9 +36,9 @@ public class MainWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JPanel panel_1 = new JPanel();
+		final JPanel panel_1 = new JPanel();
 		frame.getContentPane().add(panel_1);
-		LayoutManager cardLayout = new CardLayout(0,0);
+		final LayoutManager cardLayout = new CardLayout(0,0);
 		panel_1.setLayout(cardLayout);
 		
 		JPanel panel = new JPanel();
@@ -58,153 +51,133 @@ public class MainWindow {
 				System.exit(0);
 			}
 		});
-		btnExit.setBounds(191, 202, 89, 23);
+		btnExit.setBounds(10, 200, 89, 23);
 		panel.add(btnExit);
-		
-		JButton btnButton = new JButton("Read");
-		btnButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-			}
-		});
-		btnButton.setBounds(302, 45, 89, 23);
-		panel.add(btnButton);
 		
 		JButton btnClear = new JButton("Clear");
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textField.setText("");
-				textField_1.setText("");
-				textField_2.setText("");
-				textField_3.setText("");
-				textField_4.setText("");
-				
+				textField.setText("");			
 			}
 		});
 		
-		btnClear.setBounds(302, 79, 89, 23);
+		btnClear.setBounds(110, 200, 89, 23);
 		panel.add(btnClear);	
 		
 		JLabel lblLabel = new JLabel("Ger\u00E4teadresse eingeben:");
-		lblLabel.setBounds(39, 45, 126, 14);
+		lblLabel.setBounds(10, 53, 202, 14);
 		panel.add(lblLabel);
 		
-		JLabel lblNewLabel = new JLabel("label2");
-		lblNewLabel.setBounds(39, 70, 46, 14);
-		panel.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("label3");
-		lblNewLabel_1.setBounds(39, 95, 46, 14);
-		panel.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("label4");
-		lblNewLabel_2.setBounds(39, 120, 46, 14);
-		panel.add(lblNewLabel_2);
-		
-		JLabel lblNewLabel_3 = new JLabel("label5");
-		lblNewLabel_3.setBounds(39, 145, 46, 14);
-		panel.add(lblNewLabel_3);
-		
-		textField = new JTextField();
-		textField.setBounds(175, 42, 105, 20);
-		panel.add(textField);
-		textField.setColumns(10);
-		
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setBounds(93, 67, 105, 20);
-		panel.add(textField_1);
-		textField_1.setColumns(10);
-		
-		textField_2 = new JTextField();
-		textField_2.setEditable(false);
-		textField_2.setBounds(93, 92, 105, 20);
-		panel.add(textField_2);
-		textField_2.setColumns(10);
-		
-		textField_3 = new JTextField();
-		textField_3.setEditable(false);
-		textField_3.setBounds(93, 117, 105, 20);
-		panel.add(textField_3);
-		textField_3.setColumns(10);
-		
-		textField_4 = new JTextField();
-		textField_4.setEditable(false);
-		textField_4.setBounds(93, 142, 105, 20);
-		panel.add(textField_4);
-		textField_4.setColumns(10);
-		
-		JButton btnWeiter = new JButton("Weiter");
+		final JButton btnWeiter = new JButton("Weiter");
+		btnWeiter.setEnabled(false);
 		btnWeiter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(textField.getText());
 				((CardLayout) cardLayout).next(panel_1);
 			}
 		});
-		btnWeiter.setBounds(302, 202, 89, 23);
+		btnWeiter.setBounds(310, 200, 89, 23);
 		panel.add(btnWeiter);
+		
+		textField = new JTextField();
+		textField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (textField.getText().equals("")){
+					btnWeiter.setEnabled(true);			
+				}
+				else {
+					btnWeiter.setEnabled(false);
+				}
+			}
+		});
+		textField.setBounds(210, 50, 105, 20);
+		panel.add(textField);
+		textField.setColumns(10);
+		
+
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setLayout(null);
 		panel_1.add(panel_2, "name_1147944818536800");
 		
 		JButton button = new JButton("Exit");
-		button.setBounds(191, 202, 89, 23);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		button.setBounds(10, 200, 89, 23);
 		panel_2.add(button);
 		
-		JButton button_1 = new JButton("Read");
-		button_1.setBounds(302, 45, 89, 23);
-		panel_2.add(button_1);
-		
 		JButton button_2 = new JButton("Clear");
-		button_2.setBounds(302, 79, 89, 23);
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		button_2.setBounds(110, 200, 89, 23);
 		panel_2.add(button_2);
 		
-		JLabel label = new JLabel("Ger\u00E4teadresse eingeben:");
-		label.setBounds(39, 45, 126, 14);
-		panel_2.add(label);
-		
-		JLabel label_1 = new JLabel("label2");
-		label_1.setBounds(39, 70, 46, 14);
-		panel_2.add(label_1);
-		
-		JLabel label_2 = new JLabel("label3");
-		label_2.setBounds(39, 95, 46, 14);
-		panel_2.add(label_2);
-		
-		JLabel label_3 = new JLabel("label4");
-		label_3.setBounds(39, 120, 46, 14);
-		panel_2.add(label_3);
-		
-		JLabel label_4 = new JLabel("label5");
-		label_4.setBounds(39, 145, 46, 14);
-		panel_2.add(label_4);
-		
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		textField_5.setBounds(175, 42, 105, 20);
-		panel_2.add(textField_5);
-		
-		textField_7 = new JTextField();
-		textField_7.setEditable(false);
-		textField_7.setColumns(10);
-		textField_7.setBounds(93, 92, 105, 20);
-		panel_2.add(textField_7);
-		
-		textField_8 = new JTextField();
-		textField_8.setEditable(false);
-		textField_8.setColumns(10);
-		textField_8.setBounds(93, 117, 105, 20);
-		panel_2.add(textField_8);
-		
-		textField_9 = new JTextField();
-		textField_9.setEditable(false);
-		textField_9.setColumns(10);
-		textField_9.setBounds(93, 142, 105, 20);
-		panel_2.add(textField_9);
+		JLabel lblBlockAuswhlen = new JLabel("Block ausw\u00E4hlen:");
+		lblBlockAuswhlen.setBounds(86, 53, 126, 14);
+		panel_2.add(lblBlockAuswhlen);
 		
 		JButton button_3 = new JButton("Weiter");
-		button_3.setBounds(302, 202, 89, 23);
+		button_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((CardLayout) cardLayout).next(panel_1);
+			}
+		});
+		button_3.setBounds(310, 200, 89, 23);
 		panel_2.add(button_3);
+		
+		JButton btnZurck = new JButton("Zur\u00FCck");
+		btnZurck.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((CardLayout) cardLayout).previous(panel_1);
+			}
+		});
+		btnZurck.setBounds(210, 200, 89, 23);
+		panel_2.add(btnZurck);
+		
+		JPanel panel_3 = new JPanel();
+		panel_1.add(panel_3, "name_1149670838138700");
+		panel_3.setLayout(null);
+		
+		JButton button_4 = new JButton("Clear");
+		button_4.setBounds(110, 200, 57, 23);
+		panel_3.add(button_4);
+		
+		JLabel label_1 = new JLabel("Ger\u00E4teadresse eingeben:");
+		label_1.setBounds(69, 9, 122, 14);
+		panel_3.add(label_1);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(196, 6, 86, 20);
+		textField_1.setColumns(10);
+		panel_3.add(textField_1);
+		
+		JButton button_5 = new JButton("Weiter");
+		button_5.setBounds(310, 200, 65, 23);
+		panel_3.add(button_5);
+		
+		JButton button_1 = new JButton("Exit");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		button_1.setBounds(10, 200, 51, 23);
+		panel_3.add(button_1);
+		
+		JButton button_6 = new JButton("Zur\u00FCck");
+		button_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((CardLayout) cardLayout).previous(panel_1);
+			}
+		});
+		button_6.setBounds(210, 200, 65, 23);
+		panel_3.add(button_6);
 	}
 
 	public void setVisible(boolean b) {

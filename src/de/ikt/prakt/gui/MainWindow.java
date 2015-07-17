@@ -102,7 +102,7 @@ public class MainWindow {
 				DeviceDirectory dd = DeviceDirectory.readDevDir(pb, devAddr);
 				List<DirectoryEntry> entries = dd.readEntrys(pb);
 				
-				((DefaultTableModel) tableModel).addRow((Vector<DirectoryEntry>) entries);
+
 				((CardLayout) cardLayout).next(panel_1);
 			}
 		});

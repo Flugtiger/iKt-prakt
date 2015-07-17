@@ -23,7 +23,7 @@ public class DirectoryEntryTableModel extends AbstractTableModel {
 	@Override
 	public int getRowCount() {
 		// TODO Auto-generated method stub
-		return 0;
+		return entries.size();
 	}
 
 	@Override
@@ -32,6 +32,15 @@ public class DirectoryEntryTableModel extends AbstractTableModel {
 		switch(column) {
 		case 0:
 			return entry.getType().toString();
+			
+		case 1:
+			return entry.getSlot();
+			
+		case 2:
+			return entry.getIndex();
+			
+		case 3:
+			return entry.getNumParams();
 		}
 		return null;
 	}

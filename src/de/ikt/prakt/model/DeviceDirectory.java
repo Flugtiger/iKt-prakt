@@ -117,7 +117,7 @@ public class DeviceDirectory {
 			
 			// lese die Entries
 			for( int i = 0; i < compListDirEntry.getNumParams(); i++) {
-				int interFrameOffset = DirectoryEntry.ByteLength * (compListDirEntry.getIndex() - frameEntryOffset + i - 1);
+				int interFrameOffset = DirectoryEntry.ByteLength * (compListDirEntry.getIndex() - frameEntryOffset + i);
 				DirectoryEntry entry = new DirectoryEntry(devAddr, frame, interFrameOffset, entryTypesMap.get(compListDirEntry.getType()));
 				entries.add(entry);
 			}

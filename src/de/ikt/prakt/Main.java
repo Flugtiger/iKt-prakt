@@ -20,14 +20,14 @@ public class Main {
 					MainWindow window = new MainWindow();
 					//window.setVisible(true);
 					
-					byte devAddr = 6; //2010TD: 6; ABB Temperaturfühler TF12: 7
+					byte devAddr = 7; //2010TD: 6; ABB Temperaturfühler TF12: 7
 					
 					ProfibusInterface pb = new ProfibusInterface(InetAddress.getByName("141.76.82.170"),12345);
 					
 					DeviceDirectory dd = DeviceDirectory.readDevDir(pb, devAddr);
 					List<DirectoryEntry> entries = dd.readEntrys(pb);
 					
-					Block block = Block.readBlock(pb, entries.get(6));
+					Block block = Block.readBlock(pb, entries.get(3));
 					System.out.println("BlockObject: " + block.getBlock_Object());
 					System.out.println("ParentClass: " + block.getParent_Class());
 					System.out.println("Class: " + block.getBlockClass());

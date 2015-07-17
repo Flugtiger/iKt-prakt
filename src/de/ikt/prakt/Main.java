@@ -27,7 +27,7 @@ public class Main {
 					DeviceDirectory dd = DeviceDirectory.readDevDir(pb, devAddr);
 					List<DirectoryEntry> entries = dd.readEntrys(pb);
 					
-					Block block = Block.readBlock(pb, entries.get(3));
+					Block block = Block.readBlock(pb, entries.get(1));
 					System.out.println("BlockObject: " + block.getBlock_Object());
 					System.out.println("ParentClass: " + block.getParent_Class());
 					System.out.println("Class: " + block.getBlockClass());
@@ -35,6 +35,7 @@ public class Main {
 					
 					for(BlockParameter param : block.getParameters()) {
 						System.out.print("\t" + param.getName() + "\n\t");
+						
 						byte[] paramData = block.readParameter(pb, param);
 						for(byte b : paramData) {
 							System.out.print(String.format("%02X ", b));

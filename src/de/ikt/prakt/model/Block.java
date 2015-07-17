@@ -10,24 +10,44 @@ import de.ikt.prakt.model.blocks.TB_Temperature;
 
 public class Block {
 	
-	private DirectoryEntry dirEntry;
-	private int Block_Object;
-	private int Parent_Class;
-	private int Class;
+	protected DirectoryEntry dirEntry;
+	protected int Block_Object;
+	protected int Parent_Class;
+	protected int Class;
 	
-	private int DD_Reference;
-	private int DD_Revision;
-	private byte[] Profile;
-	private int Profile_Revision;
-	private int Execution_Time;
-	private int Number_Of_Parameters;
-	private int Address_Of_View_1;
-	private int Number_Of_Views;
+	protected int DD_Reference;
+	protected int DD_Revision;
+	protected byte[] Profile;
+	protected int Profile_Revision;
+	protected int Execution_Time;
+	protected int Number_Of_Parameters;
+	protected int Address_Of_View_1;
+	protected int Number_Of_Views;
 	
-	private List<BlockParameter> parameters;
+	protected List<BlockParameter> parameters;
 	
-	public Block() {
+	protected Block() {
 		parameters = new LinkedList<BlockParameter>();
+	}
+	
+	/**
+	 * Copy Constructor
+	 * @param obj The Block to be copied
+	 */
+	protected Block(Block obj) {
+		this();
+		this.dirEntry = obj.dirEntry;
+		this.Block_Object = obj.Block_Object;
+		this.Parent_Class = obj.Parent_Class;
+		this.Class = obj.Class;
+		this.DD_Reference = obj.DD_Reference;
+		this.DD_Revision = obj.DD_Revision;
+		this.Profile = obj.Profile;
+		this.Profile_Revision = obj.Profile_Revision;
+		this.Execution_Time = obj.Execution_Time;
+		this.Number_Of_Parameters = obj.Number_Of_Parameters;
+		this.Address_Of_View_1 = obj.Address_Of_View_1;
+		this.Number_Of_Views = obj.Number_Of_Views;
 	}
 	
 	public static Block readBlock(ProfibusInterface pb, DirectoryEntry dirEntry) {
@@ -63,7 +83,7 @@ public class Block {
 					switch(b.Class) {
 						case 1:
 							//Analog Input
-							b.parameters = new FB_Input();
+							b = new FB_Input(b);
 							break;
 					}
 					break;
@@ -74,11 +94,11 @@ public class Block {
 			switch(b.Parent_Class) {
 				case 1:
 					//Pressure
-					b.parameters = new TB_Pressure();
+					b = new TB_Pressure(b);
 					break;
 				case 2:
 					//Temperature
-					b.parameters = new TB_Temperature();
+					b = new TB_Temperature(b);
 					break;
 			}
 			break;

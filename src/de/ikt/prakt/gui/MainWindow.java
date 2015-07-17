@@ -10,21 +10,46 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import de.ikt.prakt.controller.ProfibusInterface;
+import de.ikt.prakt.model.Block;
+import de.ikt.prakt.model.DeviceDirectory;
+import de.ikt.prakt.model.DirectoryEntry;
+
 import java.awt.CardLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.net.InetAddress;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.JTable;
+import java.awt.BorderLayout;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.JScrollPane;
 
 public class MainWindow {
 
 	private JFrame frame;
 	private JTextField textField;
-	private JTextField textField_1;
+	
+	private ProfibusInterface pb;
+	private String add;
+	private JTable table;
+	private TableModel tableModel;
+
 
 	/**
 	 * Create the application.
 	 */
 	public MainWindow() {
 		initialize();
+		try{
+			pb = new ProfibusInterface(InetAddress.getByName("141.76.82.170"),12345);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -69,10 +94,15 @@ public class MainWindow {
 		panel.add(lblLabel);
 		
 		final JButton btnWeiter = new JButton("Weiter");
-		btnWeiter.setEnabled(false);
 		btnWeiter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println(textField.getText());
+				add = textField.getText();
+				
+				byte devAddr = Byte.parseByte(add);
+				DeviceDirectory dd = DeviceDirectory.readDevDir(pb, devAddr);
+				List<DirectoryEntry> entries = dd.readEntrys(pb);
+				
+				((DefaultTableModel) tableModel).addRow((Vector<DirectoryEntry>) entries);
 				((CardLayout) cardLayout).next(panel_1);
 			}
 		});
@@ -110,16 +140,8 @@ public class MainWindow {
 		button.setBounds(10, 200, 89, 23);
 		panel_2.add(button);
 		
-		JButton button_2 = new JButton("Clear");
-		button_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		button_2.setBounds(110, 200, 89, 23);
-		panel_2.add(button_2);
-		
 		JLabel lblBlockAuswhlen = new JLabel("Block ausw\u00E4hlen:");
-		lblBlockAuswhlen.setBounds(86, 53, 126, 14);
+		lblBlockAuswhlen.setBounds(59, 25, 126, 14);
 		panel_2.add(lblBlockAuswhlen);
 		
 		JButton button_3 = new JButton("Weiter");
@@ -140,25 +162,33 @@ public class MainWindow {
 		btnZurck.setBounds(210, 200, 89, 23);
 		panel_2.add(btnZurck);
 		
+		JPanel panel_4 = new JPanel();
+		panel_4.setBounds(196, 27, 89, 81);
+		panel_2.add(panel_4);
+		panel_4.setLayout(new BorderLayout(0, 0));
+		
+
+
+		DefaultTableModel tableModel = new DefaultTableModel(1,0);
+		table = new JTable(tableModel);
+
+		
+		panel_4.add(table, BorderLayout.CENTER);
+		
 		JPanel panel_3 = new JPanel();
 		panel_1.add(panel_3, "name_1149670838138700");
 		panel_3.setLayout(null);
 		
-		JButton button_4 = new JButton("Clear");
-		button_4.setBounds(110, 200, 57, 23);
-		panel_3.add(button_4);
-		
-		JLabel label_1 = new JLabel("Ger\u00E4teadresse eingeben:");
-		label_1.setBounds(69, 9, 122, 14);
-		panel_3.add(label_1);
-		
-		textField_1 = new JTextField();
-		textField_1.setBounds(196, 6, 86, 20);
-		textField_1.setColumns(10);
-		panel_3.add(textField_1);
+		JLabel lblParameterAuswhlen = new JLabel("Parameter ausw\u00E4hlen:");
+		lblParameterAuswhlen.setBounds(62, 29, 122, 14);
+		panel_3.add(lblParameterAuswhlen);
 		
 		JButton button_5 = new JButton("Weiter");
-		button_5.setBounds(310, 200, 65, 23);
+		button_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		button_5.setBounds(310, 200, 89, 23);
 		panel_3.add(button_5);
 		
 		JButton button_1 = new JButton("Exit");
@@ -167,7 +197,7 @@ public class MainWindow {
 				System.exit(0);
 			}
 		});
-		button_1.setBounds(10, 200, 51, 23);
+		button_1.setBounds(10, 200, 89, 23);
 		panel_3.add(button_1);
 		
 		JButton button_6 = new JButton("Zur\u00FCck");
@@ -176,7 +206,7 @@ public class MainWindow {
 				((CardLayout) cardLayout).previous(panel_1);
 			}
 		});
-		button_6.setBounds(210, 200, 65, 23);
+		button_6.setBounds(210, 200, 89, 23);
 		panel_3.add(button_6);
 	}
 

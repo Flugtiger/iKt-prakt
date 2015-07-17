@@ -18,7 +18,7 @@ public class Main {
 			public void run() {
 				try {
 					MainWindow window = new MainWindow();
-					//window.setVisible(true);
+					window.setVisible(true);
 					
 					byte devAddr = 7; //2010TD: 6; ABB Temperaturfühler TF12: 7
 					

@@ -78,7 +78,7 @@ public class MainWindow {
 				System.exit(0);
 			}
 		});
-		btnExit.setBounds(10, 200, 89, 23);
+		btnExit.setBounds(10, 250, 89, 23);
 		panel.add(btnExit);
 		
 		JButton btnClear = new JButton("Clear");
@@ -88,7 +88,7 @@ public class MainWindow {
 			}
 		});
 		
-		btnClear.setBounds(110, 200, 89, 23);
+		btnClear.setBounds(110, 250, 89, 23);
 		panel.add(btnClear);	
 		
 		JLabel lblLabel = new JLabel("Ger\u00E4teadresse eingeben:");
@@ -108,21 +108,10 @@ public class MainWindow {
 				((CardLayout) cardLayout).next(panel_1);
 			}
 		});
-		btnWeiter.setBounds(310, 200, 89, 23);
+		btnWeiter.setBounds(310, 250, 89, 23);
 		panel.add(btnWeiter);
 		
 		textField = new JTextField();
-		textField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (textField.getText().equals("")){
-					btnWeiter.setEnabled(true);			
-				}
-				else {
-					btnWeiter.setEnabled(false);
-				}
-			}
-		});
 		textField.setBounds(210, 50, 105, 20);
 		panel.add(textField);
 		textField.setColumns(10);

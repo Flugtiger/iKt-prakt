@@ -9,7 +9,6 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import de.ikt.prakt.model.BlockParameter;
-import sun.text.resources.CollationData_uk;
 
 /**
  * @author alex
@@ -17,6 +16,10 @@ import sun.text.resources.CollationData_uk;
  */
 public class BlockParameterTableModel extends AbstractTableModel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	List<BlockParameter> params = new LinkedList<BlockParameter>();
 	String[] columnNames = { "Name", "Typ" };
 	

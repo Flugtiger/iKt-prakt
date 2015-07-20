@@ -7,22 +7,39 @@ import javax.swing.table.AbstractTableModel;
 import de.ikt.prakt.model.DirectoryEntry;
 
 public class DirectoryEntryTableModel extends AbstractTableModel {
-
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private List<DirectoryEntry> entries;
+	private String[] columnNames = { "Typ", "Slot", "Index", "#Params" };
 	
 	public DirectoryEntryTableModel(List<DirectoryEntry> entries) {
-		// TODO Auto-generated constructor stub
+		setEntriesList(entries);
+	}
+	
+	public void setEntriesList(List<DirectoryEntry> entries) {
+		this.entries = entries;
+		super.fireTableDataChanged();
+	}
+	
+	public List<DirectoryEntry> getEntriesList() {
+		return entries;
+	}
+	
+	@Override
+	public String getColumnName(int column) {
+		return columnNames[column];
 	}
 
 	@Override
 	public int getColumnCount() {
-		// TODO Auto-generated method stub
 		return 4;
 	}
 
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
 		return entries.size();
 	}
 
@@ -31,7 +48,8 @@ public class DirectoryEntryTableModel extends AbstractTableModel {
 		DirectoryEntry entry = entries.get(row);
 		switch(column) {
 		case 0:
-			return entry.getType().toString();
+			String entryType = entry.getType().toString();
+			return entryType.replaceAll("DirEntry", "");
 			
 		case 1:
 			return entry.getSlot();

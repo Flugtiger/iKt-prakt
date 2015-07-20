@@ -1,33 +1,31 @@
 package de.ikt.prakt.gui;
 
+import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.net.InetAddress;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
 import de.ikt.prakt.controller.ProfibusInterface;
 import de.ikt.prakt.model.Block;
+import de.ikt.prakt.model.BlockParameter;
 import de.ikt.prakt.model.DeviceDirectory;
 import de.ikt.prakt.model.DirectoryEntry;
-
-import java.awt.CardLayout;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.net.InetAddress;
-import java.util.List;
-import java.util.Vector;
-
-import javax.swing.JTable;
-import java.awt.BorderLayout;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.JScrollPane;
 
 public class MainWindow {
 
@@ -36,9 +34,12 @@ public class MainWindow {
 	
 	private ProfibusInterface pb;
 	private String add;
-	private JTable table;
-	private TableModel tableModel;
-
+	private JTable blocksTable;
+	private DirectoryEntryTableModel blocksTableModel;
+	private Block selectedBlock;
+	private JTable paramsTable;
+	private BlockParameterTableModel paramsTableModel;
+	private JTextField dataTextField;
 
 	/**
 	 * Create the application.
@@ -55,11 +56,12 @@ public class MainWindow {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize() {		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 432, 280);
+		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
+		frame.setResizable(false);
 		
 		final JPanel panel_1 = new JPanel();
 		frame.getContentPane().add(panel_1);
@@ -101,7 +103,7 @@ public class MainWindow {
 				byte devAddr = Byte.parseByte(add);
 				DeviceDirectory dd = DeviceDirectory.readDevDir(pb, devAddr);
 				List<DirectoryEntry> entries = dd.readEntrys(pb);
-				
+				blocksTableModel.setEntriesList(entries);
 
 				((CardLayout) cardLayout).next(panel_1);
 			}
@@ -137,7 +139,7 @@ public class MainWindow {
 				System.exit(0);
 			}
 		});
-		button.setBounds(10, 200, 89, 23);
+		button.setBounds(10, 250, 89, 23);
 		panel_2.add(button);
 		
 		JLabel lblBlockAuswhlen = new JLabel("Block ausw\u00E4hlen:");
@@ -147,10 +149,27 @@ public class MainWindow {
 		JButton button_3 = new JButton("Weiter");
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				if(blocksTable.getSelectedRows().length == 0) {
+					JOptionPane.showMessageDialog(frame, "Bitte zuerst einen Block auswählen!!");
+					return;
+				}
+				
+				int blockId = blocksTable.getSelectedRow();
+				
+				DirectoryEntry entry = blocksTableModel.getEntriesList().get(blockId);
+				try {
+				selectedBlock = Block.readBlock(pb, entry);
+				} catch (Exception exc) {
+					JOptionPane.showMessageDialog(frame, exc.getMessage());
+				}
+				List<BlockParameter> params = selectedBlock.getParameters();
+				paramsTableModel.setParams(params);
+				
 				((CardLayout) cardLayout).next(panel_1);
 			}
 		});
-		button_3.setBounds(310, 200, 89, 23);
+		button_3.setBounds(310, 250, 89, 23);
 		panel_2.add(button_3);
 		
 		JButton btnZurck = new JButton("Zur\u00FCck");
@@ -159,36 +178,51 @@ public class MainWindow {
 				((CardLayout) cardLayout).previous(panel_1);
 			}
 		});
-		btnZurck.setBounds(210, 200, 89, 23);
+		btnZurck.setBounds(210, 250, 89, 23);
 		panel_2.add(btnZurck);
 		
-		JPanel panel_4 = new JPanel();
-		panel_4.setBounds(196, 27, 89, 81);
+		
+		blocksTableModel = new DirectoryEntryTableModel(new LinkedList<DirectoryEntry>());
+		blocksTable = new JTable(blocksTableModel);
+		blocksTable.setFillsViewportHeight(true);
+		blocksTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		blocksTable.getColumnModel().getColumn(0).setPreferredWidth(90);
+		
+		JScrollPane panel_4 = new JScrollPane(blocksTable);
+		panel_4.setBounds(20, 60, 400, 150);
 		panel_2.add(panel_4);
-		panel_4.setLayout(new BorderLayout(0, 0));
-		
-
-
-		DefaultTableModel tableModel = new DefaultTableModel(1,0);
-		table = new JTable(tableModel);
-
-		
-		panel_4.add(table, BorderLayout.CENTER);
 		
 		JPanel panel_3 = new JPanel();
 		panel_1.add(panel_3, "name_1149670838138700");
 		panel_3.setLayout(null);
 		
 		JLabel lblParameterAuswhlen = new JLabel("Parameter ausw\u00E4hlen:");
-		lblParameterAuswhlen.setBounds(62, 29, 122, 14);
+		lblParameterAuswhlen.setBounds(62, 29, 200, 14);
 		panel_3.add(lblParameterAuswhlen);
 		
 		JButton button_5 = new JButton("Weiter");
 		button_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				if(paramsTable.getSelectedRows().length == 0) {
+					JOptionPane.showMessageDialog(frame, "Bitte zuerst einen Parameter auswählen!");
+					return;
+				}
+				
+				int paramId = paramsTable.getSelectedRow();
+				BlockParameter param = paramsTableModel.getParams().get(paramId);
+				
+				try {
+					byte[] data = selectedBlock.readParameter(pb, param);
+					dataTextField.setText(selectedBlock.paramToString(pb, param, data));
+				} catch (Exception exc) {
+					JOptionPane.showMessageDialog(frame, exc.getMessage());
+				}
+				
+				((CardLayout) cardLayout).next(panel_1);
 			}
 		});
-		button_5.setBounds(310, 200, 89, 23);
+		button_5.setBounds(310, 250, 89, 23);
 		panel_3.add(button_5);
 		
 		JButton button_1 = new JButton("Exit");
@@ -197,7 +231,7 @@ public class MainWindow {
 				System.exit(0);
 			}
 		});
-		button_1.setBounds(10, 200, 89, 23);
+		button_1.setBounds(10, 250, 89, 23);
 		panel_3.add(button_1);
 		
 		JButton button_6 = new JButton("Zur\u00FCck");
@@ -206,8 +240,51 @@ public class MainWindow {
 				((CardLayout) cardLayout).previous(panel_1);
 			}
 		});
-		button_6.setBounds(210, 200, 89, 23);
+		button_6.setBounds(210, 250, 89, 23);
 		panel_3.add(button_6);
+		
+		paramsTableModel = new BlockParameterTableModel();
+		paramsTable = new JTable(paramsTableModel);
+		paramsTable.setFillsViewportHeight(true);
+		paramsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		paramsTable.getColumnModel().getColumn(0).setPreferredWidth(90);
+		
+		JScrollPane panel_5 = new JScrollPane(paramsTable);
+		panel_5.setBounds(20, 60, 400, 150);
+		panel_3.add(panel_5);
+		
+		JPanel panel_6 = new JPanel();
+		panel_1.add(panel_6, "name_1149234238138700");
+		panel_6.setLayout(null);
+		
+		JButton button_7 = new JButton("Exit");
+		button_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		button_7.setBounds(10, 250, 89, 23);
+		panel_6.add(button_7);
+		
+		JButton button_8 = new JButton("Zur\u00FCck");
+		button_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				((CardLayout) cardLayout).previous(panel_1);
+			}
+		});
+		button_8.setBounds(210, 250, 89, 23);
+		panel_6.add(button_8);
+		
+		JLabel lblData = new JLabel("gelesene Daten:");
+		lblData.setBounds(59, 25, 126, 14);
+		panel_6.add(lblData);
+		
+		dataTextField = new JTextField();
+		dataTextField.setBounds(20, 60, 400, 20);
+		dataTextField.setEditable(false);
+		
+		panel_6.add(dataTextField);
+				
 	}
 
 	public void setVisible(boolean b) {

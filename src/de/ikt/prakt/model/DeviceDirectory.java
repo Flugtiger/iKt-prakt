@@ -110,14 +110,14 @@ public class DeviceDirectory {
 			if(entryIndex > index) {
 				frame = pb.readDataAcyclic(devAddr, 1, entryIndex);
 				index = entryIndex;
-				frameEntryOffset = compListDirEntry.getIndex();
+				frameEntryOffset = compListDirEntry.getIndex() - 1;
 			}
 			if(entryIndex != index)
 				throw new RuntimeException("CompListDirEntries haben ungültige Reihenfolge");
 			
 			// lese die Entries
 			for( int i = 0; i < compListDirEntry.getNumParams(); i++) {
-				int interFrameOffset = DirectoryEntry.ByteLength * (compListDirEntry.getIndex() - frameEntryOffset + i);
+				int interFrameOffset = DirectoryEntry.ByteLength * (compListDirEntry.getIndex() - frameEntryOffset + i - 1);
 				DirectoryEntry entry = new DirectoryEntry(devAddr, frame, interFrameOffset, entryTypesMap.get(compListDirEntry.getType()));
 				entries.add(entry);
 			}

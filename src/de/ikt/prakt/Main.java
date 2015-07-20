@@ -20,7 +20,7 @@ public class Main {
 					MainWindow window = new MainWindow();
 					window.setVisible(true);
 					
-					byte devAddr = 7; //2010TD: 6; ABB Temperaturfühler TF12: 7
+					/*byte devAddr = 7; //2010TD: 6; ABB Temperaturfühler TF12: 7
 					
 					ProfibusInterface pb = new ProfibusInterface(InetAddress.getByName("141.76.82.170"),12345);
 					
@@ -41,7 +41,7 @@ public class Main {
 							System.out.print(String.format("%02X ", b));
 						}
 						System.out.print("\n\n");
-					}
+					}*/
 					
 				} catch (Exception e) {
 					e.printStackTrace();

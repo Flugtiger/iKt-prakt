@@ -156,4 +156,12 @@ public class Block {
 	public List<BlockParameter> getParameters() {
 		return parameters;
 	}
+
+	public String paramToString(ProfibusInterface pb,BlockParameter param, byte[] data) {
+		String hexData = "";
+		for(byte b : data) {
+			hexData += String.format("%02X ", b);
+		}
+		return hexData;
+	}
 }
